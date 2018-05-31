@@ -10,4 +10,7 @@ repositories {
 }
 
 dependencies {
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.2.0'
+
 }
