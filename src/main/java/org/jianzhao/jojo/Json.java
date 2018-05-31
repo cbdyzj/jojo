@@ -11,10 +11,7 @@ import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
-import java.util.Base64;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -82,6 +79,8 @@ public class Json {
             obj = Base64.getEncoder().encodeToString((byte[]) obj);
         } else if (obj instanceof Instant) {
             obj = DateTimeFormatter.ISO_INSTANT.format((Instant) obj);
+        } else if (obj instanceof Date) {
+            obj = DateTimeFormatter.ISO_INSTANT.format(((Date) obj).toInstant());
         } else {
             throw new IllegalStateException("Illegal type in JsonObject: " + obj.getClass());
         }
