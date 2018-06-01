@@ -51,19 +51,19 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>> {
     public Long getLong(String key) {
         Objects.requireNonNull(key);
         Number number = (Number) map.get(key);
-        return Json.getaLong(number);
+        return Json.getLong(number);
     }
 
     public Double getDouble(String key) {
         Objects.requireNonNull(key);
         Number number = (Number) map.get(key);
-        return Json.getaDouble(number);
+        return Json.getDouble(number);
     }
 
     public Float getFloat(String key) {
         Objects.requireNonNull(key);
         Number number = (Number) map.get(key);
-        return Json.getaFloat(number);
+        return Json.getFloat(number);
     }
 
     public Boolean getBoolean(String key) {
@@ -102,6 +102,12 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>> {
         return encoded == null ? null : Instant.from(DateTimeFormatter.ISO_INSTANT.parse(encoded));
     }
 
+    public Date getDate(String key) {
+        Objects.requireNonNull(key);
+        String encoded = (String) map.get(key);
+        return encoded == null ? null : Date.from(Instant.from(DateTimeFormatter.ISO_INSTANT.parse(encoded)));
+    }
+
     @SuppressWarnings("unchecked")
     public Object getValue(String key) {
         Objects.requireNonNull(key);
@@ -124,28 +130,28 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>> {
         Objects.requireNonNull(key);
         Number val = (Number) map.get(key);
         Integer iVal = Json.getInteger(val);
-        return null != iVal ? iVal : def;
+        return iVal != null ? iVal : def;
     }
 
     public Long getLong(String key, Long def) {
         Objects.requireNonNull(key);
         Number val = (Number) map.get(key);
-        Long lVal = Json.getaLong(val);
-        return null != lVal ? lVal : def;
+        Long lVal = Json.getLong(val);
+        return lVal != null ? lVal : def;
     }
 
     public Double getDouble(String key, Double def) {
         Objects.requireNonNull(key);
         Number val = (Number) map.get(key);
-        Double dVal = Json.getaDouble(val);
-        return null != dVal ? dVal : def;
+        Double dVal = Json.getDouble(val);
+        return dVal != null ? dVal : def;
     }
 
     public Float getFloat(String key, Float def) {
         Objects.requireNonNull(key);
         Number val = (Number) map.get(key);
-        Float fVal = Json.getaFloat(val);
-        return null != fVal ? fVal : def;
+        Float fVal = Json.getFloat(val);
+        return fVal != null ? fVal : def;
     }
 
     public Boolean getBoolean(String key, Boolean def) {
@@ -175,6 +181,13 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>> {
         Object val = map.get(key);
         return val != null || map.containsKey(key) ?
                 (val == null ? null : Instant.from(DateTimeFormatter.ISO_INSTANT.parse((String) val))) : def;
+    }
+
+    public Date getDate(String key, Date def) {
+        Objects.requireNonNull(key);
+        Object val = map.get(key);
+        return val != null || map.containsKey(key) ?
+                (val == null ? null : Date.from(Instant.from(DateTimeFormatter.ISO_INSTANT.parse((String) val)))) : def;
     }
 
     public Object getValue(String key, Object def) {
@@ -267,6 +280,12 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>> {
     public JsonObject put(String key, Instant value) {
         Objects.requireNonNull(key);
         map.put(key, value == null ? null : DateTimeFormatter.ISO_INSTANT.format(value));
+        return this;
+    }
+
+    public JsonObject put(String key, Date value) {
+        Objects.requireNonNull(key);
+        map.put(key, value == null ? null : DateTimeFormatter.ISO_INSTANT.format(value.toInstant()));
         return this;
     }
 
@@ -410,6 +429,7 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>> {
         return true;
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     static boolean equals(Object o1, Object o2) {
         if (o1 == o2)
             return true;

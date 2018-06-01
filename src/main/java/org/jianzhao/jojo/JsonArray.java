@@ -40,17 +40,17 @@ public class JsonArray implements Iterable<Object> {
 
     public Long getLong(int pos) {
         Number number = (Number) list.get(pos);
-        return Json.getaLong(number);
+        return Json.getLong(number);
     }
 
     public Double getDouble(int pos) {
         Number number = (Number) list.get(pos);
-        return Json.getaDouble(number);
+        return Json.getDouble(number);
     }
 
     public Float getFloat(int pos) {
         Number number = (Number) list.get(pos);
-        return Json.getaFloat(number);
+        return Json.getFloat(number);
     }
 
     public Boolean getBoolean(int pos) {
@@ -89,6 +89,16 @@ public class JsonArray implements Iterable<Object> {
             return null;
         } else {
             return Instant.from(DateTimeFormatter.ISO_INSTANT.parse(val));
+        }
+    }
+
+    public Date getDate(int pos) {
+        String val = (String) list.get(pos);
+        if (val == null) {
+            return null;
+        } else {
+            Instant ins = Instant.from(DateTimeFormatter.ISO_INSTANT.parse(val));
+            return Date.from(ins);
         }
     }
 
@@ -181,6 +191,12 @@ public class JsonArray implements Iterable<Object> {
     public JsonArray add(Instant value) {
         Objects.requireNonNull(value);
         list.add(DateTimeFormatter.ISO_INSTANT.format(value));
+        return this;
+    }
+
+    public JsonArray add(Date value) {
+        Objects.requireNonNull(value);
+        list.add(DateTimeFormatter.ISO_INSTANT.format(value.toInstant()));
         return this;
     }
 

@@ -88,7 +88,7 @@ public class Json {
     }
 
 
-    static Long getaLong(Number number) {
+    static Long getLong(Number number) {
         if (number == null) {
             return null;
         } else if (number instanceof Long) {
@@ -98,7 +98,7 @@ public class Json {
         }
     }
 
-    static Double getaDouble(Number number) {
+    static Double getDouble(Number number) {
         if (number == null) {
             return null;
         } else if (number instanceof Double) {
@@ -108,7 +108,7 @@ public class Json {
         }
     }
 
-    static Float getaFloat(Number number) {
+    static Float getFloat(Number number) {
         if (number == null) {
             return null;
         } else if (number instanceof Float) {
@@ -171,6 +171,13 @@ public class Json {
         @Override
         public void serialize(Instant value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
             jgen.writeString(DateTimeFormatter.ISO_INSTANT.format(value));
+        }
+    }
+
+    private static class DateSerializer extends JsonSerializer<Date> {
+        @Override
+        public void serialize(Date value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+            jgen.writeString(DateTimeFormatter.ISO_INSTANT.format(value.toInstant()));
         }
     }
 
