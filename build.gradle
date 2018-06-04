@@ -1,5 +1,5 @@
 group = 'org.jianzhao.jojo'
-version = '0.0.4'
+version = '0.0.5'
 
 apply plugin: 'java'
 
@@ -11,6 +11,7 @@ repositories {
 
 dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.5'
     testCompile 'org.junit.jupiter:junit-jupiter-api:5.2.0'
 
 }

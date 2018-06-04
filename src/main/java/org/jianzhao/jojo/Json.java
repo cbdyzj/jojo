@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -23,13 +24,15 @@ public class Json {
     public static final ObjectMapper mapper = new ObjectMapper();
 
     static {
+        mapper.registerModule(new JavaTimeModule());
+        mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+
         SimpleModule module = new SimpleModule();
         module.addSerializer(JsonObject.class, new JsonObjectSerializer());
         module.addSerializer(JsonArray.class, new JsonArraySerializer());
         module.addSerializer(Instant.class, new InstantSerializer());
         module.addSerializer(Date.class, new DateSerializer());
         module.addSerializer(byte[].class, new ByteArraySerializer());
-        mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
         mapper.registerModule(module);
     }
 
