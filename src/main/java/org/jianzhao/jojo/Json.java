@@ -1,10 +1,12 @@
 package org.jianzhao.jojo;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -19,6 +21,17 @@ import java.util.stream.StreamSupport;
 public class Json {
 
     public static final ObjectMapper mapper = new ObjectMapper();
+
+    static {
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(JsonObject.class, new JsonObjectSerializer());
+        module.addSerializer(JsonArray.class, new JsonArraySerializer());
+        module.addSerializer(Instant.class, new InstantSerializer());
+        module.addSerializer(Date.class, new DateSerializer());
+        module.addSerializer(byte[].class, new ByteArraySerializer());
+        mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+        mapper.registerModule(module);
+    }
 
     public static String encode(Object obj) throws JojoException {
         return apply(() -> mapper.writeValueAsString(obj));

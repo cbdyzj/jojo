@@ -474,21 +474,21 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>> {
 
     private class JsonObjectIterator implements Iterator<Map.Entry<String, Object>> {
 
-        final Iterator<Map.Entry<String, Object>> mapIter;
+        final Iterator<Map.Entry<String, Object>> entryIterator;
 
-        JsonObjectIterator(Iterator<Map.Entry<String, Object>> mapIter) {
-            this.mapIter = mapIter;
+        JsonObjectIterator(Iterator<Map.Entry<String, Object>> entryIterator) {
+            this.entryIterator = entryIterator;
         }
 
         @Override
         public boolean hasNext() {
-            return mapIter.hasNext();
+            return entryIterator.hasNext();
         }
 
         @SuppressWarnings("unchecked")
         @Override
         public Map.Entry<String, Object> next() {
-            Map.Entry<String, Object> entry = mapIter.next();
+            Map.Entry<String, Object> entry = entryIterator.next();
             if (entry.getValue() instanceof Map) {
                 return new Entry(entry.getKey(), new JsonObject((Map) entry.getValue()));
             } else if (entry.getValue() instanceof List) {
@@ -499,7 +499,7 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>> {
 
         @Override
         public void remove() {
-            mapIter.remove();
+            entryIterator.remove();
         }
     }
 

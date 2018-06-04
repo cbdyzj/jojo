@@ -327,21 +327,21 @@ public class JsonArray implements Iterable<Object> {
 
     private class JsonArrayIterator implements Iterator<Object> {
 
-        final Iterator<Object> listIter;
+        final Iterator<Object> listIterator;
 
-        JsonArrayIterator(Iterator<Object> listIter) {
-            this.listIter = listIter;
+        JsonArrayIterator(Iterator<Object> listIterator) {
+            this.listIterator = listIterator;
         }
 
         @Override
         public boolean hasNext() {
-            return listIter.hasNext();
+            return listIterator.hasNext();
         }
 
         @SuppressWarnings("unchecked")
         @Override
         public Object next() {
-            Object val = listIter.next();
+            Object val = listIterator.next();
             if (val instanceof Map) {
                 val = new JsonObject((Map) val);
             } else if (val instanceof List) {
@@ -352,7 +352,7 @@ public class JsonArray implements Iterable<Object> {
 
         @Override
         public void remove() {
-            listIter.remove();
+            listIterator.remove();
         }
     }
 
