@@ -59,19 +59,11 @@ public class JsonArray implements Iterable<Object> {
 
     @SuppressWarnings("unchecked")
     public JsonObject getJsonObject(int pos) {
-        Object val = list.get(pos);
-        if (val instanceof Map) {
-            val = new JsonObject((Map) val);
-        }
-        return (JsonObject) val;
+        return new JsonObject((Map) list.get(pos));
     }
 
     public JsonArray getJsonArray(int pos) {
-        Object val = list.get(pos);
-        if (val instanceof List) {
-            val = new JsonArray((List) val);
-        }
-        return (JsonArray) val;
+        return new JsonArray((List) list.get(pos));
     }
 
     public byte[] getBinary(int pos) {
@@ -102,15 +94,8 @@ public class JsonArray implements Iterable<Object> {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public Object getValue(int pos) {
-        Object val = list.get(pos);
-        if (val instanceof Map) {
-            val = new JsonObject((Map) val);
-        } else if (val instanceof List) {
-            val = new JsonArray((List) val);
-        }
-        return val;
+        return list.get(pos);
     }
 
     public boolean hasNull(int pos) {
@@ -172,13 +157,13 @@ public class JsonArray implements Iterable<Object> {
 
     public JsonArray add(JsonObject value) {
         Objects.requireNonNull(value);
-        list.add(value);
+        list.add(value.getMap());
         return this;
     }
 
     public JsonArray add(JsonArray value) {
         Objects.requireNonNull(value);
-        list.add(value);
+        list.add(value.getList());
         return this;
     }
 

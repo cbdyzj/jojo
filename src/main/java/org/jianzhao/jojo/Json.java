@@ -71,25 +71,17 @@ public class Json {
             return obj;
         } else if (obj instanceof CharSequence) {
             obj = obj.toString();
-        } else if (obj instanceof JsonObject) {
-            if (copy) {
-                obj = ((JsonObject) obj).copy();
-            }
-        } else if (obj instanceof JsonArray) {
-            if (copy) {
-                obj = ((JsonArray) obj).copy();
-            }
         } else if (obj instanceof Map) {
             if (copy) {
-                obj = (new JsonObject((Map) obj)).copy();
+                obj = (new JsonObject((Map) obj)).copy().getMap();
             } else {
-                obj = new JsonObject((Map) obj);
+                obj = new JsonObject((Map) obj).getMap();
             }
         } else if (obj instanceof List) {
             if (copy) {
-                obj = (new JsonArray((List) obj)).copy();
+                obj = (new JsonArray((List) obj)).copy().getList();
             } else {
-                obj = new JsonArray((List) obj);
+                obj = new JsonArray((List) obj).getList();
             }
         } else if (obj instanceof byte[]) {
             obj = Base64.getEncoder().encodeToString((byte[]) obj);
