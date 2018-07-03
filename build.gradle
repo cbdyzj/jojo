@@ -9,9 +9,17 @@ repositories {
     mavenCentral()
 }
 
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+}
+
 dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.5'
     testCompile 'org.junit.jupiter:junit-jupiter-api:5.2.0'
-
 }
