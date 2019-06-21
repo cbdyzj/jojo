@@ -6,7 +6,7 @@
 - Using Jackson
 - See Vert.x
 
-## Demo
+## Sample
 
 ```java
 public class JojoTest {
