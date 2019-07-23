@@ -74,12 +74,22 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>> {
     @SuppressWarnings("unchecked")
     public JsonObject getJsonObject(String key) {
         Objects.requireNonNull(key);
-        return new JsonObject((Map<String, Object>) map.get(key));
+        Map val = (Map) this.map.get(key);
+        if (val == null) {
+            return null;
+        } else {
+            return new JsonObject(val);
+        }
     }
 
     public JsonArray getJsonArray(String key) {
         Objects.requireNonNull(key);
-        return new JsonArray((List) map.get(key));
+        List val = (List) map.get(key);
+        if (val == null) {
+            return null;
+        } else {
+            return new JsonArray(val);
+        }
     }
 
     public byte[] getBinary(String key) {

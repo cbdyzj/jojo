@@ -59,11 +59,21 @@ public class JsonArray implements Iterable<Object> {
 
     @SuppressWarnings("unchecked")
     public JsonObject getJsonObject(int pos) {
-        return new JsonObject((Map) list.get(pos));
+        Map val = (Map) list.get(pos);
+        if (val == null) {
+            return null;
+        } else {
+            return new JsonObject(val);
+        }
     }
 
     public JsonArray getJsonArray(int pos) {
-        return new JsonArray((List) list.get(pos));
+        List val = (List) this.list.get(pos);
+        if (val == null) {
+            return null;
+        } else {
+            return new JsonArray(val);
+        }
     }
 
     public byte[] getBinary(int pos) {
