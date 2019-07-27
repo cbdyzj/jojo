@@ -9,9 +9,9 @@ repositories {
     mavenCentral()
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
+task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
+    archiveClassifier = 'sources'
 }
 
 artifacts {
