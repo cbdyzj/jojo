@@ -61,6 +61,14 @@ public class Json {
         return apply(() -> mapper.readValue(buf.array(), clazz));
     }
 
+    public static JsonObject flatten(JsonObject jsonObject) {
+        return new JsonObject();
+    }
+
+    public static JsonObject unFlatten(JsonObject jsonObject) {
+        return new JsonObject();
+    }
+
     @SuppressWarnings("unchecked")
     static Object checkAndCopy(Object obj, boolean copy) {
         if (obj == null
