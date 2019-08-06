@@ -62,7 +62,31 @@ public class Json {
     }
 
     public static JsonObject flatten(JsonObject jsonObject) {
-        return new JsonObject();
+        JsonObject result = new JsonObject();
+        recurseFlatten(jsonObject, "", result);
+        return result;
+    }
+
+    private static void recurseFlatten(Object current, String key, JsonObject result) {
+        if (current instanceof JsonObject) {
+            if (((JsonObject) current).isEmpty()) {
+                result.put(key, new JsonObject());
+            } else {
+                for (Map.Entry<String, Object> entry : ((JsonObject) current)) {
+                    recurseFlatten(entry.getValue(), key.length() > 0 ? key + "." + entry.getKey() : entry.getKey(), result);
+                }
+            }
+        } else if (current instanceof JsonArray) {
+            if (((JsonArray) current).isEmpty()) {
+                result.put(key, new JsonArray());
+            } else {
+                for (int i = 0; i < ((JsonArray) current).size(); i++) {
+                    recurseFlatten(((JsonArray) current).getValue(i), key.length() > 0 ? key + "[" + i + "]" : "[" + i + "]", result);
+                }
+            }
+        } else {
+            result.put(key, current);
+        }
     }
 
     public static JsonObject unFlatten(JsonObject jsonObject) {
