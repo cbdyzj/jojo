@@ -12,6 +12,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -61,9 +62,9 @@ public class Json {
         return apply(() -> mapper.readValue(buf.array(), clazz));
     }
 
-    public static JsonObject flatten(JsonObject jsonObject) {
+    public static JsonObject flatten(JsonObjectOrJsonArray<?> jsonObjectOrJsonArray) {
         JsonObject result = new JsonObject();
-        recurseFlatten(jsonObject, "", result);
+        recurseFlatten(jsonObjectOrJsonArray.get(), "", result);
         return result;
     }
 
@@ -89,8 +90,31 @@ public class Json {
         }
     }
 
-    public static JsonObject unFlatten(JsonObject jsonObject) {
-        return new JsonObject();
+    public static JsonObjectOrJsonArray<?> unFlatten(JsonObject jsonObject) {
+        JsonObjectOrJsonArray result = null;
+        for (Map.Entry<String, Object> entry : jsonObject) {
+//            String[] split = entry.getKey().split("\\.");
+
+        }
+        return result;
+    }
+
+    static class KeyVernier {
+
+        private int pos;
+        private String key;
+
+        KeyVernier(String key) {
+
+        }
+
+        void nextKey() {
+
+        }
+
+        boolean hasNextKey() {
+            return false;
+        }
     }
 
     @SuppressWarnings("unchecked")

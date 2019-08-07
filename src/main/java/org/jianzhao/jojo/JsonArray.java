@@ -104,8 +104,15 @@ public class JsonArray implements Iterable<Object> {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public Object getValue(int pos) {
-        return list.get(pos);
+        Object val = list.get(pos);
+        if (val instanceof Map) {
+            val = new JsonObject((Map) val);
+        } else if (val instanceof List) {
+            val = new JsonArray((List) val);
+        }
+        return val;
     }
 
     public boolean hasNull(int pos) {
@@ -320,7 +327,7 @@ public class JsonArray implements Iterable<Object> {
         list = Json.decodeValue(buf, List.class);
     }
 
-    private class JsonArrayIterator implements Iterator<Object> {
+    private static class JsonArrayIterator implements Iterator<Object> {
 
         final Iterator<Object> listIterator;
 
