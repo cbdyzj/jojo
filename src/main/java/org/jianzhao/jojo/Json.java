@@ -12,7 +12,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -92,27 +91,113 @@ public class Json {
 
     public static JsonObjectOrJsonArray<?> unFlatten(JsonObject jsonObject) {
         JsonObjectOrJsonArray result = null;
+        JsonObjectOrJsonArray current = null;
         for (Map.Entry<String, Object> entry : jsonObject) {
-//            String[] split = entry.getKey().split("\\.");
-
+            KeyVernier vernier = new KeyVernier(entry.getKey());
+            while (vernier.hasNext()) {
+                vernier.next();
+                if (vernier.isCurrentTypeObject()) {
+                    if (result == null) {
+                        result = JsonObjectOrJsonArray.of(new JsonObject());
+                        current = result;
+                    }
+                    JsonObject o = (JsonObject) current.get();
+                    if (!vernier.hasNext()) {
+                        o.put(vernier.currentKey(), entry.getValue());
+                    } else if (vernier.isNextTypeArray()) {
+                        JsonArray nextJsonArray = o.getJsonArray(vernier.currentKey());
+                        if (nextJsonArray == null) {
+                            nextJsonArray = new JsonArray();
+                            o.put(vernier.currentKey(), nextJsonArray);
+                        }
+                        current = JsonObjectOrJsonArray.of(nextJsonArray);
+                    } else if (vernier.isNextTypeObject()) {
+                        JsonObject nextJsonObject = o.getJsonObject(vernier.currentKey());
+                        if (nextJsonObject == null) {
+                            nextJsonObject = new JsonObject();
+                            o.put(vernier.currentKey(), nextJsonObject);
+                        }
+                        current = JsonObjectOrJsonArray.of(nextJsonObject);
+                    }
+                } else if (vernier.isCurrentTypeArray()) {
+                    if (result == null) {
+                        result = JsonObjectOrJsonArray.of(new JsonArray());
+                        current = result;
+                    }
+                    JsonArray a = (JsonArray) current.get();
+                    if (!vernier.hasNext()) {
+                        checkAndSetJsonArrayItem(a, vernier.currentIndex(), entry.getValue());
+                    } else if (vernier.isNextTypeArray()) {
+                        ensureJsonArrayCapacity(a, vernier.currentIndex() + 1);
+                        JsonArray nextJsonArray = a.getJsonArray(vernier.currentIndex());
+                        if (nextJsonArray == null) {
+                            nextJsonArray = new JsonArray();
+                            checkAndSetJsonArrayItem(a, vernier.currentIndex(), nextJsonArray);
+                        }
+                        current = JsonObjectOrJsonArray.of(nextJsonArray);
+                    } else if (vernier.isNextTypeObject()) {
+                        ensureJsonArrayCapacity(a, vernier.currentIndex() + 1);
+                        JsonObject nextJsonObject = a.getJsonObject(vernier.currentIndex());
+                        if (nextJsonObject == null) {
+                            nextJsonObject = new JsonObject();
+                            checkAndSetJsonArrayItem(a, vernier.currentIndex(), nextJsonObject);
+                        }
+                        current = JsonObjectOrJsonArray.of(nextJsonObject);
+                    }
+                }
+            }
         }
         return result;
     }
 
+    @SuppressWarnings("unchecked")
+    static void ensureJsonArrayCapacity(JsonArray jsonArray, int capacity) {
+        List<Object> list = jsonArray.getList();
+        while (list.size() < capacity) {
+            list.add(null);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    static void checkAndSetJsonArrayItem(JsonArray jsonArray, int index, Object value) {
+        ensureJsonArrayCapacity(jsonArray, index + 1);
+        Object val = checkAndCopy(value, false);
+        jsonArray.getList().set(index, val);
+    }
+
     static class KeyVernier {
 
-        private int pos;
-        private String key;
-
         KeyVernier(String key) {
-
         }
 
-        void nextKey() {
-
+        String currentKey() {
+            return "";
         }
 
-        boolean hasNextKey() {
+        int currentIndex() {
+            return 0;
+        }
+
+        void next() {
+        }
+
+        boolean isCurrentTypeObject() {
+            return false;
+        }
+
+        boolean isCurrentTypeArray() {
+            return false;
+        }
+
+        boolean isNextTypeObject() {
+            return false;
+        }
+
+        boolean isNextTypeArray() {
+            return false;
+        }
+
+        boolean hasNext() {
             return false;
         }
     }

@@ -16,13 +16,26 @@ public class FlattenTest {
                 .put("foo", "foo")
                 .put("bar", new JsonObject().put("b", "ar"))
                 .put("baz", new JsonArray().add("b").add("a").add("z"));
-        JsonObject flattened = Json.flatten(new JsonObjectOrJsonArray<>(normal));
+        JsonObject flattened = Json.flatten(JsonObjectOrJsonArray.of(normal));
         JsonObject expectedFlattened = new JsonObject()
                 .put("foo", "foo")
                 .put("bar.b", "ar")
                 .put("baz[0]", "b")
                 .put("baz[1]", "a")
                 .put("baz[2]", "z");
+        Assertions.assertEquals(flattened, expectedFlattened);
+    }
+
+    @Test
+    public void flattenArray() {
+        JsonObject flattened = Json.flatten(
+                JsonObjectOrJsonArray.of(
+                        new JsonArray()
+                                .add(new JsonArray()
+                                        .add(new JsonArray()
+                                                .add(new JsonArray()
+                                                        .add("0"))))));
+        JsonObject expectedFlattened = new JsonObject().put("[0][0][0][0]", "0");
         Assertions.assertEquals(flattened, expectedFlattened);
     }
 
@@ -42,16 +55,5 @@ public class FlattenTest {
         Assertions.assertEquals(normal.get(), expectedNormal);
     }
 
-    @Test
-    public void flattenArray() {
-        JsonObject flattened = Json.flatten(
-                new JsonObjectOrJsonArray<>(
-                        new JsonArray()
-                                .add(new JsonArray()
-                                        .add(new JsonArray()
-                                                .add(new JsonArray()
-                                                        .add("0"))))));
-        JsonObject expectedFlattened = new JsonObject().put("[0][0][0][0]", "0");
-        Assertions.assertEquals(flattened, expectedFlattened);
-    }
+
 }
