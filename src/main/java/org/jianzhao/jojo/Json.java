@@ -167,38 +167,90 @@ public class Json {
 
     static class KeyVernier {
 
-        KeyVernier(String key) {
+        private static final String JSON_OBJECT = "JSON_OBJECT";
+        private static final String JSON_ARRAY = "JSON_ARRAY";
+
+        private String source;
+        private int pos = 0;
+        private int currentIndex;
+        private String currentKey;
+        private String currentType;
+        private String nextType;
+
+        KeyVernier(String source) {
+            if (source.startsWith("[")) {
+                this.source = source;
+            } else {
+                this.source = "." + source;
+            }
         }
 
         String currentKey() {
-            return "";
+            return this.currentKey;
         }
 
         int currentIndex() {
-            return 0;
+            return this.currentIndex;
         }
 
         void next() {
+            int begin = this.pos;
+            if (this.source.charAt(begin) == '.') {
+                this.currentType = JSON_OBJECT;
+            } else if(this.source.charAt(begin) == '['){
+                this.currentType = JSON_ARRAY;
+            }else {
+                throw new JojoException("Illegal key source!");
+            }
+
+            for (int i = this.pos + 1; i < this.source.length(); i++) {
+                if (this.source.charAt(i) == '.') {
+                    this.nextType = JSON_OBJECT;
+                    this.currentKey = this.source.substring(begin, i);
+                    this.pos = i;
+                    break;
+                }
+                if (this.source.charAt(i) == '[') {
+                    this.nextType = JSON_ARRAY;
+                    this.currentKey = this.source.substring(begin, i);
+                    this.pos = i;
+                    break;
+                }
+                if (this.source.charAt(i) == ']') {
+                    this.currentIndex = Integer.parseInt(this.source.substring(begin + 1, i));
+                    if (i != this.source.length() - 1) {
+                        if (this.source.charAt(i + 1) == '.') {
+                            this.nextType = JSON_OBJECT;
+                        } else {
+                            this.nextType = JSON_ARRAY;
+                        }
+                        this.pos = i + 1;
+                    } else {
+                        this.pos = i;
+                    }
+                    break;
+                }
+            }
         }
 
         boolean isCurrentTypeObject() {
-            return false;
+            return JSON_OBJECT.equals(this.currentType);
         }
 
         boolean isCurrentTypeArray() {
-            return false;
+            return JSON_ARRAY.equals(this.currentType);
         }
 
         boolean isNextTypeObject() {
-            return false;
+            return JSON_OBJECT.equals(this.nextType);
         }
 
         boolean isNextTypeArray() {
-            return false;
+            return JSON_ARRAY.equals(this.nextType);
         }
 
         boolean hasNext() {
-            return false;
+            return this.pos != this.source.length() - 1;
         }
     }
 
@@ -291,6 +343,10 @@ public class Json {
 
         public JojoException(String message, Throwable cause) {
             super(message, cause);
+        }
+
+        public JojoException(String message) {
+            super(message);
         }
     }
 

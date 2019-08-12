@@ -8,7 +8,7 @@ public class JsonObjectOrJsonArray<T> {
         if (value instanceof JsonObject || value instanceof JsonArray) {
             this.value = value;
         } else {
-            throw new Json.JojoException("JsonObject or JsonArray instance required", null);
+            throw new Json.JojoException("JsonObject or JsonArray instance required");
         }
     }
 
