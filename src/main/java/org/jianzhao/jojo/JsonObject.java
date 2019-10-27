@@ -474,7 +474,7 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>> {
         map = Json.decodeValue(buf, Map.class);
     }
 
-    private class JsonObjectIterator implements Iterator<Map.Entry<String, Object>> {
+    private static class JsonObjectIterator implements Iterator<Map.Entry<String, Object>> {
 
         final Iterator<Map.Entry<String, Object>> entryIterator;
 

@@ -15,7 +15,7 @@ import java.util.List;
 public class JojoTest {
 
     @Test
-    public void test1() {
+    public void test0() {
         Human human = new Human();
         human.setAge(1);
         human.setBirthday(new Date(0));
@@ -32,7 +32,7 @@ public class JojoTest {
     }
 
     @Test
-    public void test2() {
+    public void test1() {
         Human human = new Human();
         human.setName("Ada");
         human.setAge(17);

@@ -320,7 +320,7 @@ public class JsonArray implements Iterable<Object> {
         list = Json.decodeValue(buf, List.class);
     }
 
-    private class JsonArrayIterator implements Iterator<Object> {
+    private static class JsonArrayIterator implements Iterator<Object> {
 
         final Iterator<Object> listIterator;
 

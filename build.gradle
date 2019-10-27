@@ -1,9 +1,13 @@
-group = 'org.jianzhao.jojo'
-version = '0.0.7'
+plugins {
+    id 'java'
+    id 'idea'
+}
 
-apply plugin: 'java'
+group = 'org.jianzhao.jojo'
+version = '0.1.0'
 
 sourceCompatibility = 8
+targetCompatibility = 8
 
 repositories {
     mavenCentral()
@@ -11,7 +15,7 @@ repositories {
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
-    archiveClassifier = 'sources'
+    archiveClassifier.set('sources')
 }
 
 artifacts {
@@ -21,5 +25,10 @@ artifacts {
 dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.9.7'
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.7'
-    testCompile 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+}
+
+test {
+    useJUnitPlatform()
 }
