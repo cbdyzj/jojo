@@ -2,7 +2,6 @@
 
 [![Release](https://jitpack.io/v/cbdyzj/jojo.svg)](https://jitpack.io/#cbdyzj/jojo)
 
-
 - Using Jackson
 - See Vert.x
 
@@ -42,7 +41,7 @@ public class JojoTest {
 
         List<Box<Human>> boxes = Collections.singletonList(humanBox);
 
-        List humans = Json.decodeValue(Json.encode(boxes), new TypeReference<List<Box<Human>>>() { });
+        List<?> humans = Json.decodeValue(Json.encode(boxes), new TypeReference<List<Box<Human>>>() { });
         Assertions.assertEquals(1, humans.size());
     }
 }
