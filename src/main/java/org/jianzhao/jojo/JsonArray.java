@@ -6,7 +6,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Stream;
 
-@SuppressWarnings("WeakerAccess")
 public class JsonArray implements Iterable<Object> {
 
     private List<Object> list;
@@ -19,7 +18,6 @@ public class JsonArray implements Iterable<Object> {
         list = new ArrayList<>();
     }
 
-    @SuppressWarnings("unchecked")
     public JsonArray(List list) {
         this.list = list;
     }
@@ -57,7 +55,6 @@ public class JsonArray implements Iterable<Object> {
         return (Boolean) list.get(pos);
     }
 
-    @SuppressWarnings("unchecked")
     public JsonObject getJsonObject(int pos) {
         Map val = (Map) list.get(pos);
         if (val == null) {
@@ -212,7 +209,6 @@ public class JsonArray implements Iterable<Object> {
         return list.contains(value);
     }
 
-    @SuppressWarnings("unchecked")
     public Object remove(int pos) {
         Object removed = list.remove(pos);
         if (removed instanceof Map) {
@@ -310,12 +306,10 @@ public class JsonArray implements Iterable<Object> {
         return list.hashCode();
     }
 
-    @SuppressWarnings("unchecked")
     private void fromJson(String json) {
         list = Json.decodeValue(json, List.class);
     }
 
-    @SuppressWarnings("unchecked")
     private void fromBuffer(ByteBuffer buf) {
         list = Json.decodeValue(buf, List.class);
     }
@@ -333,7 +327,6 @@ public class JsonArray implements Iterable<Object> {
             return listIterator.hasNext();
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         public Object next() {
             Object val = listIterator.next();

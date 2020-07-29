@@ -6,7 +6,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Stream;
 
-@SuppressWarnings("WeakerAccess")
 public class JsonObject implements Iterable<Map.Entry<String, Object>> {
 
     private Map<String, Object> map;
@@ -27,7 +26,6 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>> {
         fromBuffer(buf);
     }
 
-    @SuppressWarnings("unchecked")
     public static JsonObject mapFrom(Object obj) {
         return new JsonObject((Map<String, Object>) Json.mapper.convertValue(obj, Map.class));
     }
@@ -71,7 +69,6 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>> {
         return (Boolean) map.get(key);
     }
 
-    @SuppressWarnings("unchecked")
     public JsonObject getJsonObject(String key) {
         Objects.requireNonNull(key);
         Map val = (Map) this.map.get(key);
@@ -110,7 +107,6 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>> {
         return encoded == null ? null : Date.from(Instant.from(DateTimeFormatter.ISO_INSTANT.parse(encoded)));
     }
 
-    @SuppressWarnings("unchecked")
     public Object getValue(String key) {
         Objects.requireNonNull(key);
         Object val = map.get(key);
@@ -310,7 +306,6 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>> {
         return mergeIn(other, deep ? Integer.MAX_VALUE : 1);
     }
 
-    @SuppressWarnings("unchecked")
     public JsonObject mergeIn(JsonObject other, int depth) {
         if (depth < 1) {
             return this;
@@ -431,7 +426,6 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>> {
         return true;
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     static boolean equals(Object o1, Object o2) {
         if (o1 == o2)
             return true;
@@ -464,12 +458,10 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>> {
         return map.hashCode();
     }
 
-    @SuppressWarnings("unchecked")
     private void fromJson(String json) {
         map = Json.decodeValue(json, Map.class);
     }
 
-    @SuppressWarnings("unchecked")
     private void fromBuffer(ByteBuffer buf) {
         map = Json.decodeValue(buf, Map.class);
     }
@@ -487,7 +479,6 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>> {
             return entryIterator.hasNext();
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         public Map.Entry<String, Object> next() {
             Map.Entry<String, Object> entry = entryIterator.next();
@@ -505,7 +496,6 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>> {
         }
     }
 
-    @SuppressWarnings("WeakerAccess")
     private static final class Entry implements Map.Entry<String, Object> {
         final String key;
         final Object value;

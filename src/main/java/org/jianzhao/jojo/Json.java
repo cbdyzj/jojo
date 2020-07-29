@@ -18,10 +18,9 @@ import java.util.*;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-@SuppressWarnings("WeakerAccess")
 public class Json {
 
-    public static final ObjectMapper mapper = new ObjectMapper();
+    static final ObjectMapper mapper = new ObjectMapper();
 
     static {
         mapper.registerModule(new JavaTimeModule());
@@ -61,7 +60,6 @@ public class Json {
         return apply(() -> mapper.readValue(buf.array(), clazz));
     }
 
-    @SuppressWarnings("unchecked")
     static Object checkAndCopy(Object obj, boolean copy) {
         if (obj == null
                 || obj instanceof Number && !(obj instanceof BigDecimal)
